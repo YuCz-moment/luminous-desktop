@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="silver" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#F7F7F7"/>
+      <stop offset="0.55" stop-color="#E2E2E2"/>
+      <stop offset="1" stop-color="#BEBEBE"/>
+    </linearGradient>
+    <linearGradient id="paperGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFFDF4"/>
+      <stop offset="0.55" stop-color="#F7E9A3"/>
+      <stop offset="1" stop-color="#E6CD7B"/>
+    </linearGradient>
+    <linearGradient id="paperShadow" x1="0" y1="1" x2="0.6" y2="0.4">
+      <stop offset="0" stop-color="#D9D2B8"/>
+      <stop offset="1" stop-color="#F3E7A6"/>
+    </linearGradient>
+    <linearGradient id="goldLine" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#F4A460"/>
+      <stop offset="1" stop-color="#FFD700"/>
+    </linearGradient>
+    <filter id="ribbonGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="starGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+  <path d="M 83.5 428.5 C 43.1 385.7, 59.6 409.5, 35.3 356.0 C 14.6 301.8, 21.5 329.4, 17.8 271.6 C 17.5 214.4, 14.3 242.3, 30.9 187.7 C 50.6 134.9, 37.9 159.5, 72.1 114.9 C 108.6 73.1, 88.4 91.4, 135.5 62.2 C 183.6 36.3, 158.7 46.2, 212.2 35.6 C 265.5 28.5, 239.1 29.0, 292.0 37.7 C 343.6 49.8, 319.1 41.0, 364.9 67.4 Q 370.0 58.5, 350.0 93.2 C 330.8 79.8, 309.9 72.4, 349.0 94.9 C 263.8 68.9, 242.1 69.2, 285.6 76.4 C 198.7 82.0, 178.9 89.8, 221.3 81.4 C 143.7 116.6, 128.3 130.5, 164.1 108.2 C 105.3 167.2, 96.0 185.2, 121.1 152.5 C 87.7 226.7, 85.5 246.4, 97.1 207.8 C 92.2 287.1, 96.9 305.8, 94.3 266.6 C 117.2 340.6, 127.9 356.1, 112.1 321.2 Q 90.5 421.5, 83.5 428.5 Z" fill="url(#silver)"/>
+  <path d="M 168 372 C 240 336, 300 290, 398 104 C 380 122, 302 300, 196 344 Z" fill="url(#paperShadow)" opacity="0.55"/>
+  <path d="M 168 372 C 240 336, 300 290, 398 104
+           C 404 92, 390 86, 380 94
+           C 320 180, 286 240, 232 278
+           C 210 296, 184 336, 168 372 Z" fill="url(#paperGrad)"/>
+  <path d="M 380 94 C 320 180, 286 240, 232 278" fill="none" stroke="#FFFDF4" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  <path d="M 118 336 C 150 314, 180 326, 214 352" fill="none" stroke="url(#goldLine)" stroke-width="9" stroke-linecap="round" opacity="0.5" filter="url(#ribbonGlow)"/>
+  <path d="M 118 336 C 150 314, 180 326, 214 352" fill="none" stroke="url(#goldLine)" stroke-width="5.5" stroke-linecap="round"/>
+  <g transform="translate(410.8 66.8) scale(1.1)" filter="url(#starGlow)">
+    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="#FFEFA0" opacity="0.85"/>
+  </g>
+  <g transform="translate(410.8 66.8) scale(1.1)">
+    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="#FFD700"/>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "name": "luminous-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Luminous desktop (Tauri v2)",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "server": "node server.js"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luminous — Where ideas become light.</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon.png?v=1786300000000">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=1786300000000">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=1786300000000">
+  <link rel="stylesheet" href="style.css?v=1786300000000">
+</head>
+<body>
+  <!-- 无边框窗口自绘标题栏（桌面版显示，网页版隐藏） -->
+  <div class="titlebar" id="titlebar" data-tauri-drag-region="deep">
+    <div class="titlebar-controls">
+      <button class="tb-btn" id="tb-min" title="最小化" aria-label="最小化"><svg viewBox="0 0 10 10" width="10" height="10"><path d="M0 5h10" stroke="currentColor" stroke-width="1.3"/></svg></button>
+      <button class="tb-btn" id="tb-max" title="最大化 / 还原" aria-label="最大化"><svg viewBox="0 0 10 10" width="10" height="10"><rect x="0.7" y="0.7" width="8.6" height="8.6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></button>
+      <button class="tb-btn tb-close" id="tb-close" title="关闭" aria-label="关闭"><svg viewBox="0 0 10 10" width="10" height="10"><path d="M0 0l10 10M10 0L0 10" stroke="currentColor" stroke-width="1.3"/></svg></button>
+    </div>
+  </div>
+
+  <!-- 顶部工具栏 -->
+  <header class="toolbar" data-tauri-drag-region="deep">
+    <img class="brand-icon" src="favicon.png?v=1786300000000" alt="Luminous" draggable="false">
+    <div class="brand" title="Luminous · 流光 — Where ideas become light.">Luminous</div>
+    <span class="sep"></span>
+    <div class="tool-group canvas-group">
+      <select id="canvas-select" title="切换画布"></select>
+    </div>
+    <span class="sep"></span>
+    <div class="tool-group more-wrap">
+      <button class="tool-btn" id="btn-more" title="更多操作">⋯</button>
+      <div class="add-menu hidden" id="more-menu">
+        <button class="add-item" data-act="undo" disabled><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg><span>撤销</span><kbd>Ctrl+Z</kbd></button>
+        <button class="add-item" data-act="redo" disabled><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg><span>重做</span><kbd>Ctrl+Y</kbd></button>
+        <button class="add-item" data-act="save"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg><span>保存</span><kbd>Ctrl+S</kbd></button>
+        <button class="add-item" data-act="import"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span>导入</span><kbd>Ctrl+O</kbd></button>
+        <button class="add-item" data-act="export"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><span>导出</span><kbd>Ctrl+E</kbd></button>
+        <button class="add-item" data-act="ai-canvas"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg><span>AI 看画布</span></button>
+        <button class="add-item" data-act="ai-config"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>AI 模型设置</span></button>
+                <div class="menu-sep"></div>
+        <button class="add-item" data-act="bg"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 1.5-.5 2.5-2 2.5h-2a2 2 0 0 0-2 2c0 .5.2 1 .5 1.4.3.5.5 1 .5 1.6a2 2 0 0 1-2 2z"/><circle cx="7.5" cy="11.5" r=".5" fill="currentColor"/><circle cx="11" cy="7.5" r=".5" fill="currentColor"/><circle cx="16" cy="9.5" r=".5" fill="currentColor"/></svg><span>画布背景</span></button>
+        <button class="add-item" data-act="new-canvas"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 8v8M8 12h8"/></svg><span>新建画布</span><kbd>Ctrl+N</kbd></button>
+        <button class="add-item" data-act="rename-canvas"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg><span>重命名画布</span></button>
+        <button class="add-item danger" data-act="del-canvas"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg><span>删除画布</span></button>
+<div class="menu-sep"></div>
+        <button class="add-item" data-act="onboard"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 7h6"/></svg><span>新手教程</span></button>
+<div class="menu-sep"></div><button class="add-item" data-act="contact"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg><span>问题</span></button>
+      </div>
+      <div class="add-menu bg-menu hidden" id="bg-menu">
+        <div class="bg-label">画布背景</div>
+        <div class="bg-grid" id="bg-grid"></div>
+        <label class="bg-custom"><input type="color" id="bg-custom" value="#dbe9ff"><span>自定义颜色</span></label>
+        <div class="bg-label">背景图片</div>
+        <div class="bg-file-row">
+          <span class="bg-file-thumb hidden" id="bg-image-thumb"></span>
+          <button class="bg-file-btn" id="bg-pick-image">选择图片</button>
+          <button class="bg-file-btn danger hidden" id="bg-clear-image">移除</button>
+        </div>
+        <div class="bg-label">纹理</div>
+        <div class="bg-grid tex-grid" id="bg-textures"></div>
+        <div class="bg-file-row">
+          <span class="bg-file-thumb hidden" id="bg-tex-thumb"></span>
+          <button class="bg-file-btn" id="bg-pick-tex">选择纹理</button>
+          <button class="bg-file-btn danger hidden" id="bg-clear-tex">移除</button>
+        </div>
+        <input type="file" id="bg-file-image" accept="image/*" class="hidden">
+        <input type="file" id="bg-file-tex" accept="image/*" class="hidden">
+      </div>
+    </div>
+    <span class="sep"></span>
+    <div class="tool-group filter-wrap">
+      <button class="tool-btn" id="btn-filter"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg><span id="filter-label">筛选</span></button>
+      <div class="add-menu hidden" id="filter-menu">
+        <button class="add-item active" data-filter="all"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg><span>全部</span></button>
+        <button class="add-item" data-filter="url"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span>网页</span></button>
+        <button class="add-item" data-filter="image"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg><span>图片</span></button>
+        <button class="add-item" data-filter="video"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg><span>视频</span></button>
+        <button class="add-item" data-filter="text"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/></svg><span>文字</span></button>
+        <button class="add-item" data-filter="audio"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>音频</span></button>
+      </div>
+    </div>
+    <span class="sep"></span>
+<div class="tool-group add-wrap">
+      <button class="tool-btn" id="btn-add"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span>素材</span></button>
+      <div class="add-menu hidden" id="add-menu">
+        <button class="add-item" data-act="image"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg><span>图片</span></button>
+        <button class="add-item" data-act="text"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/></svg><span>文字</span></button>
+        <button class="add-item" data-act="audio"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>音频</span></button>
+        <button class="add-item" data-act="video"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg><span>视频</span></button>
+        <button class="add-item" data-act="url"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span>网页</span></button>
+      </div>
+    </div>
+    
+
+    <div class="tool-right">
+      <button class="tool-btn icon" id="btn-help" title="操作提示"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M9 7h6"/></svg></button>
+    </div>
+  </header>
+  <div class="help-pop hidden" id="help-pop">
+    <div class="help-title">操作提示</div>
+    <div class="help-stats" id="help-stats">
+      <div class="hs-main" id="help-stats-main"></div>
+      <div class="hs-detail" id="help-stats-detail"></div>
+    </div>
+    <ul class="help-sections">
+      <li><div class="help-sec">素材</div>
+        <ul>
+          <li>点「＋素材」添加：网页 / 图片 / 文字 / 音频 / 视频；也可以直接把文件拖进画布，或 Ctrl+V 粘贴截图 / 一段文字</li>
+          <li>网页卡：自动抓取 logo、标题、简介、封面，可手动修改；双击简介直接编辑；拖一张图片到卡片上可替换封面</li>
+          <li>图片卡：纯图显示，点击浮现工具栏（AI 分析 / 裁剪）；右下角可拖拽缩放</li>
+          <li>文字卡：双击输入，字号随卡片大小自动缩放；音频 / 视频支持本地大文件，存入 IndexedDB，刷新不丢</li>
+          <li>文档卡（桌面版）：直接拖入 Word / Excel / PPT / PDF，双击即可用 WPS / Office 打开；卡片只存路径，不占画布空间</li>
+          <li>顶栏「筛选」可只看某一类素材</li>
+        </ul>
+      </li>
+      <li><div class="help-sec">卡片</div>
+        <ul>
+          <li>左键拖动移动；Alt+左键拖出 = 复制一份</li>
+          <li>Ctrl+左键逐张加选 / 取消，Ctrl+左键拖空白处框选；选中后可批量移动、复制、删除、整组缩放</li>
+          <li>右键卡片：删除 / 复制到画外（切换到其他画布后可粘贴）</li>
+          <li>拖卡片右侧小圆点到另一张卡建立连线；悬停连线出现删除按钮，双击连线也可删除</li>
+        </ul>
+      </li>
+      <li><div class="help-sec">画布</div>
+        <ul>
+          <li>左键拖空白处平移；滚轮缩放（5%～300%）</li>
+          <li>右下角小地图：开关按钮显示 / 隐藏，点击或拖动可定位；缩放率实时显示，点击百分比恢复 100%</li>
+          <li>「适配画布」「重置视图」一键归位</li>
+          <li>⋯ 菜单：画布背景（预设 / 自定义颜色 / 图片 / 纹理）、新建 / 重命名 / 删除画布；顶部下拉切换画布，双击名字重命名</li>
+        </ul>
+      </li>
+      <li><div class="help-sec">快捷键</div>
+        <ul>
+          <li>Ctrl+Z 撤销 · Ctrl+Y 重做 · Ctrl+S 保存 · Ctrl+O 导入 · Ctrl+E 导出 · Ctrl+N 新建画布 · Ctrl+V 粘贴</li>
+        </ul>
+      </li>
+      <li><div class="help-sec">AI</div>
+        <ul>
+          <li>⋯ → AI 模型设置：填接口地址 / API Key / 模型名，可「测试连接」；分析时图片会发送到你填写的接口</li>
+          <li>图片卡点「AI 分析」生成设计关键词卡片；⋯ → AI 看画布可一键总结整张画布</li>
+        </ul>
+      </li>
+      <li><div class="help-sec">数据</div>
+        <ul>
+          <li>画布与素材全部保存在本机浏览器；导出为 JSON（自动打包图片 / 视频 / 音频），发给别人后可直接导入打开</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 无限画布 -->
+  <main class="viewport" id="viewport">
+    <div class="world" id="world">
+      <svg class="lines" id="lines"></svg>
+      <div class="cards-layer" id="cards"></div>
+      <div class="group-box hidden" id="group-box"></div>
+      <div class="group-resize hidden" id="group-resize" title="拖拽整组缩放"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div>
+    </div>
+    <div class="right-dock">
+      <div class="minimap" id="minimap" title="点击 / 拖动可定位画布">
+        <div class="mm-cards" id="mm-cards"></div>
+        <div class="mm-viewport" id="mm-viewport"></div>
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="zoom-out" title="缩小">－</button>
+        <button class="zoom-label" id="zoom-label" title="点击恢复 100%">100%</button>
+        <button class="zoom-btn" id="zoom-in" title="放大">＋</button>
+        <span class="sep"></span>
+        <button class="zoom-btn" id="zoom-fit" title="适配画布"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+        <button class="zoom-btn" id="zoom-reset" title="重置视图（100%）"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
+        <span class="sep"></span>
+        <button class="zoom-btn mm-toggle" id="mm-toggle" title="小地图（点击显示 / 隐藏）"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg></button>
+      </div>
+    </div>
+    <div class="loading-mask hidden" id="loading-mask">
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <div id="loading-text">AI 分析中…</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 添加网页弹窗 -->
+  <div class="modal-backdrop hidden" id="url-modal">
+    <div class="modal">
+      <div class="modal-title">添加网页素材</div>
+      <input class="modal-input" id="url-input" type="url" placeholder="粘贴网址，如 https://example.com">
+      <div class="modal-actions">
+        <button class="tool-btn" id="url-cancel">取消</button>
+        <button class="tool-btn primary" id="url-ok">抓取并添加</button>
+      </div>
+      <div class="modal-hint">自动提取 logo、标题、简介和封面图；添加后可直接在卡片上编辑</div>
+    </div>
+  </div>
+
+  <!-- 重命名画布 -->
+  <div class="modal-backdrop hidden" id="canvas-rename-modal">
+    <div class="modal">
+      <div class="modal-title">重命名画布</div>
+      <input class="modal-input" id="canvas-rename-input" type="text" maxlength="30" placeholder="输入画布名称">
+      <div class="modal-actions">
+        <button class="tool-btn" id="canvas-rename-cancel">取消</button>
+        <button class="tool-btn primary" id="canvas-rename-ok">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除画布确认 -->
+  <div class="modal-backdrop hidden" id="canvas-del-modal">
+    <div class="modal">
+      <div class="modal-title">删除画布</div>
+      <div class="modal-body">确定删除画布「<b id="canvas-del-title"></b>」吗？画布内的卡片会一并删除，此操作不可撤销。</div>
+      <div class="modal-actions">
+        <button class="tool-btn" id="canvas-del-cancel">取消</button>
+        <button class="tool-btn danger" id="canvas-del-ok">删除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 模型设置 -->
+  <div class="modal-backdrop hidden" id="ai-cfg-modal">
+    <div class="modal">
+      <div class="modal-title">AI 模型设置</div>
+      <label class="ai-label">模型</label>
+      <div class="ai-model-row">
+        <input class="modal-input" id="ai-model-input" type="text" placeholder="qwen3.5-omni-plus">
+        <select class="ai-preset" id="ai-model-preset">
+          <option value="">常用模型…</option>
+          <option value="qwen3.5-omni-plus">qwen3.5-omni-plus（阿里）</option>
+          <option value="qwen-vl-max">qwen-vl-max（阿里）</option>
+          <option value="qwen-vl-plus">qwen-vl-plus（阿里）</option>
+          <option value="gpt-4o">gpt-4o（OpenAI）</option>
+          <option value="gpt-4o-mini">gpt-4o-mini（OpenAI）</option>
+          <option value="glm-4v-plus">glm-4v-plus（智谱）</option>
+          <option value="deepseek-vl2">deepseek-vl2（DeepSeek）</option>
+        </select>
+      </div>
+      <label class="ai-label">接口地址 Base URL</label>
+      <input class="modal-input" id="ai-base-input" type="text" placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1">
+      <label class="ai-label">API Key</label>
+      <input class="modal-input" id="ai-key-input" type="password" placeholder="sk-…">
+      <div class="ai-test-row">
+        <button class="tool-btn" id="ai-test-btn">测试连接</button>
+        <span class="ai-test-status" id="ai-test-status"></span>
+      </div>
+      <div class="modal-actions">
+        <button class="tool-btn" id="ai-cfg-cancel">取消</button>
+        <button class="tool-btn primary" id="ai-cfg-ok">保存</button>
+      </div>
+      <div class="modal-hint">配置仅保存在本机浏览器；图片会发送到你填写的接口地址进行分析。留空则使用服务端默认配置。</div>
+    </div>
+  </div>
+
+  <!-- 导入画布确认 -->
+  <div class="modal-backdrop hidden" id="import-modal">
+    <div class="modal">
+      <div class="modal-title">导入画布</div>
+      <div class="modal-body" id="import-summary"></div>
+      <div class="modal-actions">
+        <button class="tool-btn" id="import-cancel">取消</button>
+        <button class="tool-btn primary" id="import-ok">导入</button>
+      </div>
+      <div class="modal-hint">导入的画布会添加到画布列表并自动打开，不影响现有画布</div>
+    </div>
+  </div>
+
+  <div class="sel-bar hidden" id="sel-bar">
+    <span id="sel-count">已选 0 项</span>
+    <button class="tool-btn" id="sel-copy">复制</button>
+    <button class="tool-btn danger" id="sel-delete">删除</button>
+    <button class="tool-btn" id="sel-clear">取消选择</button>
+  </div>
+
+  <input type="file" id="file-input" accept="image/*,video/*,audio/*" multiple hidden>
+  <input type="file" id="card-icon-file" accept="image/*" hidden>
+  <input type="file" id="card-thumb-file" accept="image/*" hidden>
+  <input type="file" id="import-file" accept=".json,application/json" hidden>
+
+
+  <!-- 右键菜单 -->
+  <div class="ctx-menu hidden" id="ctx-menu">
+    <button class="ctx-item hidden" data-ctx="open-file">打开文件</button>
+    <button class="ctx-item" data-ctx="save-file">保存到文件夹</button>
+    <button class="ctx-item" data-ctx="copy-file">复制文件到剪贴板</button>
+    <button class="ctx-item" data-ctx="drag-file">拖出窗口</button>
+    <div class="ctx-sep" id="ctx-file-sep"></div>
+    <button class="ctx-item" data-ctx="copy">复制到画外</button>
+    <button class="ctx-item danger" data-ctx="delete">删除</button>
+  </div>
+
+    <!-- 新手引导 -->
+  <div class="onboard-backdrop hidden" id="onboard">
+    <div class="onboard-card">
+      <button class="onboard-skip" id="onboard-skip" title="跳过新手教程">跳过 <span>Esc</span></button>
+      <div class="onboard-demo" id="onboard-demo"></div>
+      <div class="onboard-body">
+        <div class="onboard-title" id="onboard-title"></div>
+        <div class="onboard-text" id="onboard-text"></div>
+      </div>
+      <div class="onboard-foot">
+        <label class="onboard-again" title="勾选后，下次打开不会再自动弹出教程"><input type="checkbox" id="onboard-noauto" checked> 下次不再自动显示</label>
+        <div class="onboard-dots" id="onboard-dots"></div>
+        <div class="onboard-actions">
+          <button class="tool-btn" id="onboard-prev">上一步</button>
+          <button class="tool-btn primary" id="onboard-next">下一步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="toast-wrap" id="toasts"></div>
+  <script src="app.js?v=1786300000000"></script>
+</body>
+</html>
