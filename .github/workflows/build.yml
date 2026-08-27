@@ -1,4 +1,4 @@
-﻿name: Build Desktop
+name: Build Desktop
 
 on:
   push:
@@ -48,7 +48,7 @@ jobs:
           path: src-tauri/target/release/bundle/nsis/*.exe
 
   macos-intel:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
 

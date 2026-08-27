@@ -1,4 +1,4 @@
-﻿# Luminous Desktop（流光桌面版）
+# Luminous Desktop（流光桌面版）
 
 流光（Luminous）无限画布的桌面客户端，基于 Tauri 2，支持 Windows / macOS（Intel + Apple Silicon）。
 
@@ -34,7 +34,7 @@ npm run build    # 打 release 安装包（Windows: bundle/nsis/，macOS: bundle
 `.github/workflows/build.yml` 在推送 `v*` tag 或手动触发时，并行构建三个平台：
 
 - Windows x64：NSIS 安装包（`.exe`）
-- macOS Intel（`macos-13`）：DMG + `.app.zip`
+- macOS Intel（`macos-15-intel`）：DMG + `.app.zip`
 - macOS Apple Silicon（`macos-latest`）：DMG + `.app.zip`
 
 推送 tag 后会自动生成一个 **draft Release**，审阅无误后发布即可分享给用户下载。
